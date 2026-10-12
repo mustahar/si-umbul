@@ -18,13 +18,17 @@ jobs:
         distribution: 'zulu'
         java-version: '11'
 
-    - name: Setup Gradle Wrapper and Build APK
+    - name: Download and Install Gradle
       run: |
+        wget https://services.gradle.org/distributions/gradle-7.5-bin.zip
+        unzip gradle-7.5-bin.zip
         echo "include ':app'" > settings.gradle
         echo "rootProject.name='Si-Umbul'" >> settings.gradle
-        gradle wrapper --gradle-version 7.5
-        chmod +x gradlew
-        ./gradlew assembleRelease
+
+    - name: Build APK Release
+      run: |
+        export PATH=$PWD/gradle-7.5/bin:$PATH
+        gradle assembleRelease
 
     - name: Upload APK Artifact
       uses: actions/upload-artifact@v4
